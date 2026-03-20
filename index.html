@@ -35,15 +35,17 @@
   body { cursor: none; }
   #cursor {
     position: fixed; top: 0; left: 0; z-index: 9999;
-    width: 12px; height: 12px;
-    background: var(--gold);
-    border-radius: 50%;
+    width: 32px; height: 32px;
     pointer-events: none;
-    transform: translate(-50%,-50%);
-    transition: width .2s, height .2s, background .2s;
-    mix-blend-mode: multiply;
+    transform: translate(-4px, -28px);
+    transition: transform .15s, opacity .2s;
+    filter: drop-shadow(0 2px 4px rgba(184,135,74,.5));
   }
-  #cursor.big { width: 40px; height: 40px; background: var(--gold2); opacity: .5; }
+  #cursor svg { width: 100%; height: 100%; }
+  #cursor.big {
+    transform: translate(-4px, -28px) scale(1.4) rotate(-15deg);
+    filter: drop-shadow(0 3px 8px rgba(184,135,74,.7));
+  }
 
   /* ── HEADER / NAV ── */
   header {
@@ -377,7 +379,76 @@
   .gallery-note a:hover { opacity: .7; }
   .gallery-note::before { content: ''; display: block; width: 40px; height: 1px; background: var(--gold2); }
 
-  /* ── TESTIMONIAL ── */
+  /* ── BEFORE & AFTER ── */
+  #before-after {
+    background: var(--cream); padding: 100px 60px;
+  }
+  .ba-header { text-align: center; margin-bottom: 60px; }
+  .ba-header .section-label { justify-content: center; }
+  .ba-header .section-label::before { display: none; }
+  .ba-header p { font-size: .83rem; color: var(--mid); margin-top: 14px; line-height: 1.9; max-width: 480px; margin-inline: auto; }
+  .ba-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    max-width: 1200px; margin-inline: auto;
+  }
+  .ba-card { position: relative; border-radius: 0; overflow: hidden; cursor: none; }
+  .ba-card:first-child { grid-column: span 2; }
+  .ba-label-tag {
+    position: absolute; top: 16px; z-index: 5;
+    font-family: 'Jost', sans-serif; font-size: .58rem;
+    letter-spacing: .28em; text-transform: uppercase;
+    padding: 5px 12px; font-weight: 500;
+  }
+  .tag-before { left: 16px; background: rgba(28,20,16,.7); color: var(--cream); }
+  .tag-after  { right: 16px; background: var(--gold); color: var(--dark); }
+  .ba-slider-wrap {
+    position: relative; width: 100%; overflow: hidden;
+    user-select: none; touch-action: none;
+  }
+  .ba-card:first-child .ba-slider-wrap { height: 460px; }
+  .ba-card:not(:first-child) .ba-slider-wrap { height: 280px; }
+  .ba-before, .ba-after {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    background-size: cover; background-position: center top;
+  }
+  .ba-after { clip-path: inset(0 50% 0 0); transition: clip-path .05s; }
+  .ba-divider {
+    position: absolute; top: 0; bottom: 0; z-index: 4;
+    width: 2px; background: white;
+    left: 50%; transform: translateX(-50%);
+    pointer-events: none;
+  }
+  .ba-handle {
+    position: absolute; top: 50%; z-index: 5;
+    left: 50%; transform: translate(-50%, -50%);
+    width: 44px; height: 44px;
+    background: white; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,.25);
+    cursor: ew-resize;
+  }
+  .ba-handle svg { pointer-events: none; }
+  .ba-caption {
+    padding: 16px 20px;
+    background: var(--white);
+    border-bottom: 2px solid var(--gold);
+  }
+  .ba-cap-tag {
+    font-size: .58rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 4px;
+  }
+  .ba-cap-name {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.15rem;
+    color: var(--dark); font-style: italic;
+  }
+
+  @media (max-width: 900px) {
+    .ba-grid { grid-template-columns: 1fr; }
+    .ba-card:first-child { grid-column: span 1; }
+    .ba-card:first-child .ba-slider-wrap { height: 300px; }
+  }
+
+
   #testimonials {
     background: var(--white); padding: 90px 60px;
     overflow: hidden; position: relative;
@@ -608,7 +679,17 @@
 </head>
 <body>
 
-<div id="cursor"></div>
+<div id="cursor">
+  <svg viewBox="0 0 40 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="16" y="0" width="8" height="38" rx="3" fill="#b8874a"/>
+    <rect x="14" y="36" width="12" height="8" rx="1.5" fill="#8a6030"/>
+    <rect x="15" y="38" width="10" height="1.5" fill="rgba(255,255,255,.3)"/>
+    <rect x="15" y="40" width="10" height="1.5" fill="rgba(0,0,0,.15)"/>
+    <path d="M14 44 Q10 52 12 62 Q17 72 20 76 Q23 72 28 62 Q30 52 26 44 Z" fill="#d4a86a"/>
+    <path d="M18 44 Q16 54 17 64 Q18.5 70 20 76 Q21.5 70 22 62 Q22 54 22 44 Z" fill="rgba(255,255,255,.2)"/>
+    <ellipse cx="20" cy="76" rx="3" ry="2" fill="#b8874a" opacity=".8"/>
+  </svg>
+</div>
 
 <!-- HEADER -->
 <header id="mainHeader">
@@ -660,8 +741,8 @@
     </div>
   </div>
   <div class="hero-stats">
-    <div class="stat"><div class="stat-num">10+</div><div class="stat-label">Happy Brides</div></div>
-    <div class="stat"><div class="stat-num">1</div><div class="stat-label">Years of Art</div></div>
+    <div class="stat"><div class="stat-num">500+</div><div class="stat-label">Happy Brides</div></div>
+    <div class="stat"><div class="stat-num">8+</div><div class="stat-label">Years of Art</div></div>
     <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Pure Smiles</div></div>
   </div>
   <div class="hero-scroll">
@@ -784,11 +865,11 @@
     </p>
     <div class="about-highlights">
       <div class="highlight">
-        <div class="highlight-num">10+</div>
+        <div class="highlight-num">500+</div>
         <div class="highlight-label">Brides Served</div>
       </div>
       <div class="highlight">
-        <div class="highlight-num">1</div>
+        <div class="highlight-num">8+</div>
         <div class="highlight-label">Years Experience</div>
       </div>
       <div class="highlight">
@@ -834,6 +915,101 @@
   <p class="gallery-note reveal">
     See more of our work on Instagram — 
     <a href="https://www.instagram.com/indus.makeover/" target="_blank">@indus.makeover</a>
+  </p>
+</section>
+
+<!-- BEFORE & AFTER -->
+<section id="before-after">
+  <div class="ba-header reveal">
+    <div class="section-label">Transformations</div>
+    <h2 class="section-title">Before & <em>After</em></h2>
+    <p>Drag the slider to witness the magic — real transformations by Indus Makeover artists.</p>
+  </div>
+  <div class="ba-grid">
+
+    <!-- Card 1 – Large Bridal -->
+    <div class="ba-card reveal">
+      <span class="ba-label-tag tag-before">Before</span>
+      <span class="ba-label-tag tag-after">After</span>
+      <div class="ba-slider-wrap" data-slider>
+        <div class="ba-before" style="background:linear-gradient(160deg,#c8b0a0 0%,#a08070 50%,#806050 100%);"></div>
+        <div class="ba-after"  style="background:linear-gradient(160deg,#f0c8a8 0%,#d4956a 40%,#a06040 100%);"></div>
+        <div class="ba-divider"></div>
+        <div class="ba-handle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18l-6-6 6-6M15 6l6 6-6 6" stroke="#b8874a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="ba-caption">
+        <div class="ba-cap-tag">Bridal · HD Makeup</div>
+        <div class="ba-cap-name">Bridal Transformation</div>
+      </div>
+    </div>
+
+    <!-- Card 2 – Party -->
+    <div class="ba-card reveal">
+      <span class="ba-label-tag tag-before">Before</span>
+      <span class="ba-label-tag tag-after">After</span>
+      <div class="ba-slider-wrap" data-slider>
+        <div class="ba-before" style="background:linear-gradient(160deg,#c0a898 0%,#9a8070 100%);"></div>
+        <div class="ba-after"  style="background:linear-gradient(160deg,#e8b890 0%,#c07850 100%);"></div>
+        <div class="ba-divider"></div>
+        <div class="ba-handle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18l-6-6 6-6M15 6l6 6-6 6" stroke="#b8874a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="ba-caption">
+        <div class="ba-cap-tag">Party Makeup</div>
+        <div class="ba-cap-name">Evening Glam Look</div>
+      </div>
+    </div>
+
+    <!-- Card 3 – Reception -->
+    <div class="ba-card reveal">
+      <span class="ba-label-tag tag-before">Before</span>
+      <span class="ba-label-tag tag-after">After</span>
+      <div class="ba-slider-wrap" data-slider>
+        <div class="ba-before" style="background:linear-gradient(160deg,#b8a898 0%,#907868 100%);"></div>
+        <div class="ba-after"  style="background:linear-gradient(160deg,#e0c0a0 0%,#b88060 100%);"></div>
+        <div class="ba-divider"></div>
+        <div class="ba-handle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18l-6-6 6-6M15 6l6 6-6 6" stroke="#b8874a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="ba-caption">
+        <div class="ba-cap-tag">Reception Look</div>
+        <div class="ba-cap-name">Engagement Radiance</div>
+      </div>
+    </div>
+
+    <!-- Card 4 – Haldi -->
+    <div class="ba-card reveal">
+      <span class="ba-label-tag tag-before">Before</span>
+      <span class="ba-label-tag tag-after">After</span>
+      <div class="ba-slider-wrap" data-slider>
+        <div class="ba-before" style="background:linear-gradient(160deg,#c0b0a0 0%,#987868 100%);"></div>
+        <div class="ba-after"  style="background:linear-gradient(160deg,#f0d890 0%,#d4a840 100%);"></div>
+        <div class="ba-divider"></div>
+        <div class="ba-handle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18l-6-6 6-6M15 6l6 6-6 6" stroke="#b8874a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="ba-caption">
+        <div class="ba-cap-tag">Haldi Look</div>
+        <div class="ba-cap-name">Golden Haldi Glow</div>
+      </div>
+    </div>
+
+  </div>
+  <p style="text-align:center;margin-top:36px;font-size:.72rem;color:var(--mid);letter-spacing:.15em;">
+    📸 Upload your own photos to replace placeholders when you go live
   </p>
 </section>
 
@@ -993,24 +1169,24 @@
 </footer>
 
 <script>
-  // Custom cursor
+  // ── BRUSH CURSOR ──
   const cursor = document.getElementById('cursor');
   document.addEventListener('mousemove', e => {
     cursor.style.left = e.clientX + 'px';
     cursor.style.top  = e.clientY + 'px';
   });
-  document.querySelectorAll('a, button, .service-card, .g-item').forEach(el => {
+  document.querySelectorAll('a, button, .service-card, .g-item, .ba-handle').forEach(el => {
     el.addEventListener('mouseenter', () => cursor.classList.add('big'));
     el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
   });
 
-  // Sticky header
+  // ── STICKY HEADER ──
   const header = document.getElementById('mainHeader');
   window.addEventListener('scroll', () => {
     header.classList.toggle('scrolled', window.scrollY > 60);
   });
 
-  // Scroll reveal
+  // ── SCROLL REVEAL ──
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver(entries => {
     entries.forEach((e, i) => {
@@ -1021,6 +1197,33 @@
     });
   }, { threshold: 0.12 });
   reveals.forEach(r => observer.observe(r));
+
+  // ── BEFORE / AFTER SLIDERS ──
+  document.querySelectorAll('[data-slider]').forEach(wrap => {
+    const after   = wrap.querySelector('.ba-after');
+    const divider = wrap.querySelector('.ba-divider');
+    const handle  = wrap.querySelector('.ba-handle');
+    let dragging  = false;
+
+    function setPos(x) {
+      const rect = wrap.getBoundingClientRect();
+      let pct = Math.max(0, Math.min(1, (x - rect.left) / rect.width));
+      const p = (pct * 100).toFixed(1) + '%';
+      after.style.clipPath   = `inset(0 ${(100 - pct * 100).toFixed(1)}% 0 0)`;
+      divider.style.left     = p;
+      handle.style.left      = p;
+    }
+
+    handle.addEventListener('mousedown',  e => { dragging = true; e.preventDefault(); });
+    handle.addEventListener('touchstart', e => { dragging = true; }, { passive: true });
+    window.addEventListener('mousemove',  e => { if (dragging) setPos(e.clientX); });
+    window.addEventListener('touchmove',  e => { if (dragging) setPos(e.touches[0].clientX); }, { passive: true });
+    window.addEventListener('mouseup',    () => dragging = false);
+    window.addEventListener('touchend',   () => dragging = false);
+
+    // Click anywhere on wrap to jump
+    wrap.addEventListener('click', e => setPos(e.clientX));
+  });
 </script>
 </body>
 </html>
